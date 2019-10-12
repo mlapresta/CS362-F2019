@@ -683,9 +683,9 @@ int getCost(int cardNumber)
 
 int BaronAction(int discard, struct gameState *state, int handPos, int currentPlayer){
     state->numBuys++;//Increase buys by 1!
+    int cardNotDiscarded = 1;
     if (discard > 0) { //Boolean true or going to discard an estate
         int p = 0;//Iterator for hand!
-        int cardNotDiscarded = 1;//Flag for discard set!
 
         while(cardNotDiscarded) {
             if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
@@ -707,7 +707,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
         }
     }
 
-    if (discard==0 || cardNotDiscarded==1){
+    if (discard==0 || !cardNotDiscarded ){
         if (supplyCount(estate, state) > 0) {
             gainCard(estate, state, 0, currentPlayer);//Gain an estate
 
