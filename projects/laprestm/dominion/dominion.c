@@ -831,7 +831,7 @@ int TributeAction(struct gameState *state, int handPos){
         while (nxtPlyDeckCnt+nxtPlyDiscCnt>=1){
             drawCard(nextPlayer, state);
             tributeRevealedCards[i]=state->hand[nextPlayer][nxtPlyHandCnt];
-            tributeCount++;
+            tributeCnt++;
             nxtPlyHandCnt++;
             nxtPlyDeckCnt = state->deckCount[nextPlayer];     //update deck count
             nxtPlyDiscCnt = state->discardCount[nextPlayer];  //update discard count
