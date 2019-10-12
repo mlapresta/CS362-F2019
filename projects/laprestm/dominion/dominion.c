@@ -707,7 +707,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
         }
     }
 
-    if (discard==0 || !cardNotDiscarded ){
+    if (discard==0 || cardNotDiscarded==1 ){
         if (supplyCount(estate, state) > 0) {
             gainCard(estate, state, 0, currentPlayer);//Gain an estate
 
