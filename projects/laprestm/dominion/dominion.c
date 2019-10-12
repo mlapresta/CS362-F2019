@@ -699,7 +699,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
                     printf("Must gain an estate if there are any\n");
                 }
 
-                card_not_discarded = 0;//Exit the loop
+                break;
             }
             else {
                 p++;//Next card
@@ -707,7 +707,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
         }
     }
 
-    if (discard==0 || !card_not_discarded){
+    if (discard==0 || card_not_discarded==1){
         if (supplyCount(estate, state) > 0) {
             gainCard(estate, state, 0, currentPlayer);//Gain an estate
 
@@ -726,6 +726,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
 int MinionAction(int coinChoice, struct gameState *state, int handPos){
     int currentPlayer = whoseTurn(state);
     int i;
+    int j;
     //+1 action
     state->numActions++;
 
@@ -829,7 +830,7 @@ int TributeAction(struct gameState *state, int handPos){
     for (i=0; i<2; i++){
         while (nxtPlyDeckCnt+nxtPlyDiscCnt>=1){
             drawCard(nextPlayer, state);
-            tributeRevealedCards[i]=state->hand[nextPlayer][state->nxtPlyHandCnt];
+            tributeRevealedCards[i]=state->hand[nextPlayer][nxtPlyHandCnt];
             tributeCount++;
             nxtPlyHandCnt++;
             nxtPlyDeckCnt = state->deckCount[nextPlayer];     //update deck count
@@ -837,7 +838,7 @@ int TributeAction(struct gameState *state, int handPos){
         }
     }
 
-    for (i=0; i<tributeCount; i++){
+    for (i=0; i<tributeCnt; i++){
         discardCard(nxtPlyHandCnt-1, nextPlayer, state, 0);
         nxtPlyHandCnt--;
     }
@@ -1022,7 +1023,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         return -1;
 
     case mine:
-      return int MineAction(choice1, choice2, state, handPos);
+      return MineAction(choice1, choice2, state, handPos);
 
 /*        j = state->hand[currentPlayer][choice1];  //store card we will trash
 
