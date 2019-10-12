@@ -685,13 +685,13 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
     state->numBuys++;//Increase buys by 1!
     if (discard > 0) { //Boolean true or going to discard an estate
         int p = 0;//Iterator for hand!
-        int card_not_discarded = 1;//Flag for discard set!
+        int cardNotDiscarded = 1;//Flag for discard set!
 
-        while(card_not_discarded) {
+        while(cardNotDiscarded) {
             if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
                 state->coins += 4;//Add 4 coins to the amount of coins
                 discardCard(p, currentPlayer, state, 0);
-                card_not_discarded = 0;//Exit the loop
+                cardNotDiscarded = 0;//Exit the loop
             }
             else if (p > state->handCount[currentPlayer]) {
                 if(DEBUG) {
@@ -707,7 +707,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
         }
     }
 
-    if (discard==0 || card_not_discarded==1){
+    if (discard==0 || cardNotDiscarded==1){
         if (supplyCount(estate, state) > 0) {
             gainCard(estate, state, 0, currentPlayer);//Gain an estate
 
