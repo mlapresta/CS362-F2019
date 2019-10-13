@@ -698,8 +698,8 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
                     printf("No estate cards in your hand, invalid choice\n");
                     printf("Must gain an estate if there are any\n");
                 }
-
-                break;
+                //break;
+                cardNotDiscarded = 0;
             }
             else {
                 p++;//Next card
@@ -728,7 +728,7 @@ int MinionAction(int coinChoice, struct gameState *state, int handPos){
     int i;
     int j;
     //+1 action
-    state->numActions++;
+    //state->numActions++;
 
     //discard card from hand
     discardCard(handPos, currentPlayer, state, 0);
@@ -744,7 +744,7 @@ int MinionAction(int coinChoice, struct gameState *state, int handPos){
                 while( state->handCount[i] > 0 )
                     discardCard(0, i, state, 0);
                 //draw 4
-                for (j = 0; j < 4; j++)
+                for (j = 0; j <= 4; j++)
                     drawCard(i, state);
             }
 
@@ -761,9 +761,9 @@ int AmbassadorAction(int choice1, int choice2, struct gameState *state, int hand
     int currentPlayer = whoseTurn(state);
     int i;
 
-    if (choice2 > 2 || choice2 < 0)
+    /*if (choice2 > 2 || choice2 < 0)
         return -1;
-
+    */
     if (choice1 == handPos)
         return -1;
 
@@ -782,7 +782,7 @@ int AmbassadorAction(int choice1, int choice2, struct gameState *state, int hand
         printf("Player %d reveals card number: %d\n", currentPlayer, state->hand[currentPlayer][choice1]);
 
     //increase supply count for choosen card by amount being discarded
-    state->supplyCount[cardToReveal] += choice2;
+    //state->supplyCount[cardToReveal] += choice2;
 
     //each other player gains a copy of revealed card
     for (i = 0; i < state->numPlayers; i++){
@@ -843,15 +843,15 @@ int TributeAction(struct gameState *state, int handPos){
         nxtPlyHandCnt--;
     }
 
-    if (tributeRevealedCards[0] == tributeRevealedCards[1])  //If we have a duplicate card, just drop one
+  /*  if (tributeRevealedCards[0] == tributeRevealedCards[1])  //If we have a duplicate card, just drop one
         tributeCnt--;
-
+  */
     for (i = 0; i < tributeCnt; i ++) {
         if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){//Treasure cards
             state->coins += 2;
         }
 
-        else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) { //Victory Card Found
+        else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens /*|| tributeRevealedCards[i] == great_hall*/) { //Victory Card Found
             drawCard(currentPlayer, state);
             drawCard(currentPlayer, state);
         }
@@ -881,15 +881,16 @@ int MineAction(int choice1, int choice2, struct gameState *state, int handPos){
         return -1;
     }
 
-    if ( (getCost(trashCard) + 3) > getCost(choice2) )
+    /*(if ( (getCost(trashCard) + 3) > getCost(choice2) )
     {
         return -1;
-    }
+    }*/
+
 
     gainCard(choice2, state, 2, currentPlayer);
 
     //discard card from hand
-    discardCard(handPos, currentPlayer, state, 0);
+    discardCard(handPos, currentPlayer, state, 1);
 
     //discard trashed card
     discardCard(choice1, currentPlayer, state, 1);
