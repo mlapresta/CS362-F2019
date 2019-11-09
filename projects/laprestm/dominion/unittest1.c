@@ -279,6 +279,10 @@ void testBaronCard(){
   testAssert((G.hand[0][0]!=baron)&&(G.playedCards[0]==baron)&&(G.playedCardCount==1), "Baron discarded from hand");
   testAssert((G.hand[0][0]==copper)&&(G.hand[0][1]==copper)&&(G.hand[0][2]==copper)&&(G.hand[0][3]==copper), "Player's remaining cards unchanged");
 
+  memset(&G, 23, sizeof(struct gameState));
+  r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
+  G.handCount[0]=5;
+
   printf("\n\n##############################################################\n");
   printf("Baron Test Case:\n User chooses to not discard estate.\n");
   printf("##############################################################\n");
