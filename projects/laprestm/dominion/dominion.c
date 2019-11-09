@@ -718,7 +718,7 @@ int BaronAction(int discard, struct gameState *state, int handPos, int currentPl
         }
     }
 
-    discardCard(handPos, currentPlayer, state, 0);
+    //discardCard(handPos, currentPlayer, state, 0);
 
     return 0;
 }
@@ -798,6 +798,7 @@ int AmbassadorAction(int choice1, int choice2, struct gameState *state, int hand
         for (i = 0; i < state->handCount[currentPlayer]; i++){
             if (cardToReveal == handCard(i, state)){
                 discardCard(i, currentPlayer, state, 1);
+                break;
             }
         }
     }
@@ -827,16 +828,17 @@ int TributeAction(struct gameState *state, int handPos){
         return 0;
     }
 
-    for (i=0; i<2; i++){
-        while (nxtPlyDeckCnt+nxtPlyDiscCnt>=1){
-            drawCard(nextPlayer, state);
-            tributeRevealedCards[i]=state->hand[nextPlayer][nxtPlyHandCnt];
-            tributeCnt++;
-            nxtPlyHandCnt++;
-            nxtPlyDeckCnt = state->deckCount[nextPlayer];     //update deck count
-            nxtPlyDiscCnt = state->discardCount[nextPlayer];  //update discard count
-        }
+    i=0;
+    while ((nxtPlyDeckCnt+nxtPlyDiscCnt>=1)&&(i<2)){
+        drawCard(nextPlayer, state);
+        tributeRevealedCards[i]=state->hand[nextPlayer][nxtPlyHandCnt];
+        tributeCnt++;
+        nxtPlyHandCnt++;
+        nxtPlyDeckCnt = state->deckCount[nextPlayer];     //update deck count
+        nxtPlyDiscCnt = state->discardCount[nextPlayer];  //update discard count
+        i++;
     }
+
 
     for (i=0; i<tributeCnt; i++){
         discardCard(nxtPlyHandCnt-1, nextPlayer, state, 0);
@@ -871,12 +873,12 @@ int MineAction(int choice1, int choice2, struct gameState *state, int handPos){
     int currentPlayer = whoseTurn(state);
     int trashCard = state->hand[currentPlayer][choice1];  //store card we will trash
 
-    if (trashCard > treasure_map || trashCard  < curse)
+    if (trashCard > gold || trashCard  < copper)
     {
         return -1;
     }
 
-    if (choice2 > treasure_map || choice2 < curse)
+    if (choice2 > gold || choice2  < copper)
     {
         return -1;
     }
