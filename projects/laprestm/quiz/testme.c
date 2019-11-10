@@ -15,12 +15,12 @@ char *inputString()
 {
     int i;
     static char returnStr[6];
-    char validStrChar[]="rset";
+    char validStrChar[]="rset\0";
     int charIdx;
     memset(returnStr, '\0', sizeof(returnStr));
 
-    for (i=0; i<5; i++){
-        charIdx=rand()%(4);
+    for (i=0; i<6; i++){
+        charIdx=rand()%(5);
         returnStr[i]=validStrChar[charIdx];
     }
 
