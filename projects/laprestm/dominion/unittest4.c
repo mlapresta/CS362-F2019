@@ -237,7 +237,7 @@ void testTributeCard(){
   actionSave=G.numActions;
 
   TributeAction(&G, 0);
-  //original number of actions is 1, playing card makes it zero, so an increase is delta=3 actions
+
   testAssert((actionSave+4==G.numActions), "Number of actions increased by 4");
   testAssert((G.hand[0][0]!=tribute), "Tribute discarded from hand");
   testAssert((G.hand[0][0]==copper)&&(G.hand[0][1]==copper)&&(G.hand[0][2]==copper)&&(G.hand[0][3]==copper)&&(G.hand[0][4]==-1), "After Tribute removed from hand, rest of hand unchanged");
@@ -508,7 +508,7 @@ void testTributeCard(){
 
   TributeAction(&G, 0);
   testAssert((coinSave+2==G.coins), "Number of coins increased by 2");
-  testAssert((actionSave+2==G.numActions), "Number of actions increased by 2"); //We use one action playing the tribute card, so the total gained actions vs the original is 2-1
+  testAssert((actionSave+2==G.numActions), "Number of actions increased by 2");
   testAssert((G.hand[0][0]!=tribute), "Tribute discarded from hand");
   testAssert((G.hand[0][0]==copper)&&(G.hand[0][1]==copper)&&(G.hand[0][2]==copper)&&(G.hand[0][3]==copper)&&(G.hand[0][4]==-1), "After Tribute removed from hand, rest of hand unchanged");
   testAssert((G.hand[1][0]==silver)&&(G.hand[1][1]==silver)&&(G.hand[1][2]==silver)&&(G.hand[1][3]==silver)&&(G.hand[1][4]==silver), "Opponent's hand unchanged");
@@ -597,7 +597,6 @@ void testTributeCard(){
   handCountSaveP1=G.handCount[0];
 
   TributeAction(&G, 0);
-  testAssert((G.hand[0][0]!=tribute), "Tribute discarded from hand");
   testAssert((G.hand[0][0]==tribute)&&(G.hand[0][1]==copper)&&(G.hand[0][2]==copper)&&(G.hand[0][3]==copper)&&(G.hand[0][4]==copper), "rest of hand unchanged (minus the added cards)");
   testAssert((G.hand[1][0]==silver)&&(G.hand[1][1]==silver)&&(G.hand[1][2]==silver)&&(G.hand[1][3]==silver)&&(G.hand[1][4]==silver), "Opponent's hand unchanged");
 
