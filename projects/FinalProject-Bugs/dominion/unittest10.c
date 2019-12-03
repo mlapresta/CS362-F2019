@@ -193,11 +193,20 @@ void runUnitTest(){
   int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
   int buySave, coinSave;
   struct gameState G;
-  struct gameState savedG;
+  struct gameState Gsaved;
   memset(&G, 23, sizeof(struct gameState));
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
 
+  G.handCount[0] = 2;
+  G.hand[0][0] = silver;
+  G.hand[0][1] = silver;
 
+
+  memcpy(&Gsaved, &G, sizeof(struct gameState));
+  cardEffect(ambassador, silver, 0, 0, &G, 0, 0);
+  char message[] = "test that cards removed";
+  testAssert(G.handCount[0] == 0, message);
+  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver] + 2, message);
 }
 
 int main(int argc, char *argv[]){

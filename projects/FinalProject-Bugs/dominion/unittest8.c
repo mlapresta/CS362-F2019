@@ -194,11 +194,22 @@ void runUnitTest(){
   int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
   int buySave, coinSave;
   struct gameState G;
-  struct gameState savedG;
+  struct gameState Gsaved;
   memset(&G, 23, sizeof(struct gameState));
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
 
+  //set up round so that current player plays card that
+  //gives bonus coins
 
+  G.handCount[0] = 1;
+  G.hand[0][0] = cutpurse;
+  G.supplyCount[cutpurse]--;
+
+  memcpy(&Gsaved, &G, sizeof(struct gameState));
+
+  int res = playCard(0, 0, 0, 0, &G);
+  char testName[] = "assert coins update correctly";
+  testAssert(G.coins == Gsaved.coins + 2, testName);
 }
 
 int main(int argc, char *argv[]){
