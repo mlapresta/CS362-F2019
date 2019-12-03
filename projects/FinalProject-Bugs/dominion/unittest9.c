@@ -210,9 +210,10 @@ void runUnitTest(){
   // int cardEffect(int card, int choice1, int choice2, int choice3, 
   // struct gameState *state, int handPos, int *bonus)
   cardEffect(tribute, 0, 0, 0, &G, 1, 0);
-  char message[] = "Tribute effect applied properly";
+  char message[] = "Tribute effect applied properly, 2 coins added";
   testAssert(G.coins == Gsaved.coins + 2, message);
-  testAssert(G.numActions == Gsaved.numActions, message);
+  char message2[] = "Tribute effect applied properly, no actions added";
+  testAssert(G.numActions == Gsaved.numActions, message2);
 
 }
 

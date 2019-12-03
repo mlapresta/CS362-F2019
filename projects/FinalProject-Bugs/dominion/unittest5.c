@@ -36,10 +36,17 @@ int main() {
     int k[10] = {adventurer, council_room, feast, gardens, mine
                , remodel, smithy, village, baron, minion};
     struct gameState G, testG;
+<<<<<<< HEAD
     printf("Testing bug 5\n");
 
 
     //initialize game
+=======
+    printf("Testing bug 5\n");  
+
+    
+    //initialize game 
+>>>>>>> 915001fd2fe589ae55af0fd685c0eff3b159adda
    	initializeGame(numPlayer,k,seed,&G);
     G.handCount[0] = 2;
   //Setup player hand with 1 mine and 1 copper
@@ -49,7 +56,11 @@ int main() {
   G.supplyCount[copper]--;
 
   G.discardCount[0]=3;
+<<<<<<< HEAD
   //setup player discard pile with 1 mine and 2 coppers
+=======
+  //setup player discard pile with 1 mine and 2 coppers 
+>>>>>>> 915001fd2fe589ae55af0fd685c0eff3b159adda
   G.discard[0][0]=copper;
   G.supplyCount[copper]--;
   G.discard[0][1]=copper;
@@ -57,7 +68,11 @@ int main() {
   G.discard[0][2] = mine;
   G.supplyCount[mine]--;
 
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 915001fd2fe589ae55af0fd685c0eff3b159adda
   G.deckCount[0]=5;
 
   //set up player deck pile with 3 curses and 2 estates
@@ -86,9 +101,16 @@ int main() {
   	printf("Fail: Score for player one  is not correct\n");
   }
 
+<<<<<<< HEAD
 
 printf("END TEST bug 5\n");
 printf("******************************************************************************************************\n");
 return 0;
+=======
+    	
+printf("END TEST bug 5\n");
+printf("******************************************************************************************************\n");
+return 0;   
+>>>>>>> 915001fd2fe589ae55af0fd685c0eff3b159adda
 
 }
