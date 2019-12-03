@@ -206,8 +206,8 @@ void runUnitTest(){
   //initialize player 0's hand:
   G.hand[0][0] = mine;
   G.supplyCount[mine]--;
-  G.hand[0][1] = copper;
-  G.supplyCount[copper]--;
+  G.hand[0][1] = silver;
+  G.supplyCount[silver]--;
 
   //initialize player 0's hand:
   G.hand[1][0] = silver;
@@ -225,20 +225,23 @@ void runUnitTest(){
   G.hand[1][2] = gold;
   G.supplyCount[gold]--;
 
-  memcpy(&GSave, &G, sizeof(struct gameState));
-  testassert(cardEffect(mine, 1, silver, 0, &G, 0, &bonus)==0, "Function finished without error" );
+  printf("Player 1 plays mine card, trades silver (cost = 3) for copper (cost = 0)\n");
+  memcpy(&savedG, &G, sizeof(struct gameState));
+
+  testAssert((cardEffect(mine, 1, copper, 0, &G, 0, &bonus)==0), "Function finished without error" );
   cardFound = 0;
   for (i=0; i<G.handCount[0]; i++){
     if (G.hand[0][i] == silver)
       cardFound = 1;
   }
-  testassert(cardFound == 1, "Player gained card");
+  testAssert(cardFound == 0, "Card player has chosen to exchange is removed from hand");
   cardFound = 0;
   for (i=0; i<G.handCount[0]; i++){
     if (G.hand[0][i] == copper)
       cardFound = 1;
   }
-  testassert(cardFound == 0, "Player card traded is missing from hand");
+  testAssert(cardFound == 1, "Card player has chosen to gain is in hand");
+
 
 }
 

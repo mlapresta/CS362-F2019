@@ -197,6 +197,42 @@ void runUnitTest(){
   memset(&G, 23, sizeof(struct gameState));
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
 
+  //initialize player hand counts
+  G.handCount[0] = 2;
+  G.handCount[1] = 3;
+  G.handCount[2] = 3;
+
+  //initialize player 0's hand:
+  G.hand[0][0] = mine;
+  G.supplyCount[mine]--;
+  G.hand[0][1] = copper;
+  G.supplyCount[copper]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][1] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][2] = silver;
+  G.supplyCount[silver]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][1] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][2] = gold;
+  G.supplyCount[gold]--;
+
+  testAssert(isGameOver(&G) == 0 , "Game has full supply piles, game is not over");
+
+  G.supplyCount[treasure_map] = 0;
+  G.supplyCount[sea_hag] = 0;
+  G.supplyCount[curse] = 0;
+
+  memcpy(&savedG, &G, sizeof(struct gameState));
+
+  testAssert(isGameOver(&G) == 1 , "Game has three empty supply piles, game is over");
 
 }
 

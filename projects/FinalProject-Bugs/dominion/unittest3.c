@@ -192,6 +192,7 @@ void runUnitTest(){
   int bonus;
   int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
   int buySave, coinSave;
+  int cardFound = 0;
   struct gameState G;
   struct gameState savedG;
   memset(&G, 23, sizeof(struct gameState));
@@ -205,8 +206,8 @@ void runUnitTest(){
   //initialize player 0's hand:
   G.hand[0][0] = remodel;
   G.supplyCount[remodel]--;
-  G.hand[0][1] = estate;
-  G.supplyCount[estate]--;
+  G.hand[0][1] = silver;
+  G.supplyCount[silver]--;
 
   //initialize player 0's hand:
   G.hand[1][0] = silver;
@@ -224,20 +225,23 @@ void runUnitTest(){
   G.hand[1][2] = gold;
   G.supplyCount[gold]--;
 
-  memcpy(&GSave, &G, sizeof(struct gameState));
-  testassert(cardEffect(remodel, 1, feast, 0, &G, 0, &bonus)==0, "Function finished without error" );
+  printf("Player 1 plays remodel card, trades silver (cost = 3) for feast (cost = 4)\n");
+
+  memcpy(&savedG, &G, sizeof(struct gameState));
+  testAssert(cardEffect(remodel, 1, feast, 0, &G, 0, &bonus)==0, "Function finished without error" );
+
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == silver)
+      cardFound = 1;
+  }
+  testAssert(cardFound == 0, "Card player has chosen to exchange is removed from hand");
   cardFound = 0;
   for (i=0; i<G.handCount[0]; i++){
     if (G.hand[0][i] == feast)
       cardFound = 1;
   }
-  testassert(cardFound == 1, "Player gained card");
-  cardFound = 0;
-  for (i=0; i<G.handCount[0]; i++){
-    if (G.hand[0][i] == estate)
-      cardFound = 1;
-  }
-  testassert(cardFound == 0, "Player card traded is missing from hand");
+  testAssert(cardFound == 1, "Card player has chosen to gain is in hand");
 
 }
 

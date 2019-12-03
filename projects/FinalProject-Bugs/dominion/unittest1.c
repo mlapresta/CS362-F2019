@@ -191,11 +191,44 @@ void runUnitTest(){
   int p, r, handCount;
   int bonus;
   int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
-  int buySave, coinSave;
+  int playerCardCount = 0;
   struct gameState G;
   struct gameState savedG;
   memset(&G, 23, sizeof(struct gameState));
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
+
+  //initialize player hand counts
+  G.handCount[0] = 2;
+  G.handCount[1] = 3;
+  G.handCount[2] = 3;
+
+  //initialize player 0's hand:
+  G.hand[0][0] = mine;
+  G.supplyCount[mine]--;
+  G.hand[0][1] = copper;
+  G.supplyCount[copper]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][1] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][2] = silver;
+  G.supplyCount[silver]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][1] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][2] = gold;
+  G.supplyCount[gold]--;
+  playerCardCount = G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount;
+  memcpy(&savedG, &G, sizeof(struct gameState));
+  printf("Player 1 plays mine card, trades copper (cost = 0) for silver (cost = 3)\n");
+
+  cardEffect(mine, 1, silver, 0, &G, 0, &bonus)==0;
+  testAssert((playerCardCount==G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount), "Player card count unchanged" );
 
 
 
