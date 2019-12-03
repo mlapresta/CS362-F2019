@@ -1,208 +1,93 @@
+/*
+Name: Maryum Shabazz
+Date: 11/30/19
+Description: Test for Bug 7
+*/
+
 #include "dominion.h"
 #include "dominion_helpers.h"
-#include "interface.h"
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
 #include "rngs.h"
+#include <time.h>
+#include <stdlib.h>
 
-void testAssert(_Bool pass, char *testName){
-  if (pass){
-    printf("Test %s: Passed\n", testName);
-  }
-  else{
-    printf("Test %s: Failed\n", testName);
-  }
+
+//Values to compare functions
+int assertValues(int paramOne, int paramTwo)
+{
+    if(paramOne==paramTwo)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-int myInitializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
-                   struct gameState *state){
-  int i;
-  int j;
-  int it;
 
-  //set up random number generator
-  SelectStream(1);
-  PutSeed((long)randomSeed);
 
-  //check number of players
-  if (numPlayers > MAX_PLAYERS || numPlayers < 2)
+
+int main() {
+    int seed = 100;
+    int numPlayer=2;
+	//seed random number generator
+	srand(time(0));
+    int k[10] = {adventurer, council_room, tribute, gardens, mine
+               , remodel, smithy, village, baron, minion};
+    struct gameState G;
+    int card=19, choice1=0,choice2=0,choice3=0, handPos=0; 
+    int bonus=0;
+    
+    printf("Testing bug 7\n");  
+
+    
+    //initialize game 
+   	initializeGame(numPlayer,k,seed,&G);
+    int currentPlayer=whoseTurn(&G);
+
+    int nextPlayer=currentPlayer+1;
+  G.handCount[0] = 2;
+  //Setup player hand with 1 tribute and 1 copper
+  G.hand[0][0] = tribute;
+  G.supplyCount[tribute]--;
+  G.hand[0][1] = copper;
+  G.supplyCount[copper]--;
+  
+  G.handCount[1] = 3;
+
+  //Set second player's hand, we set to 2 mines and 1 gold
+  G.deck[nextPlayer][G.deckCount[nextPlayer]-1] = gold;
+  G.deck[nextPlayer][G.deckCount[nextPlayer]-2] = mine;
+  G.deck[nextPlayer][G.deckCount[nextPlayer]-3] = mine;
+
+  //note: when calling the tribute card (number 19) choice1,choice2
+  //choice3 and bonus serve no purpose
+  int actionsPre=G.numActions;
+  int coinsPre=G.coins;  
+  cardEffect(card, choice1,choice2,choice3,&G,handPos,&bonus);
+  
+  //asserts if actions before and after playing tribute card are the same. 
+  //if third card is not looked at actions of player 1 should be increaed by 2 only. 
+  if((assertValues(G.numActions,(actionsPre+2)))&& (assertValues(coinsPre+2,G.coins)))
   {
-      return -1;
-  }
-
-  //set number of players
-  state->numPlayers = numPlayers;
-
-  //check selected kingdom cards are different
-  for (i = 0; i < 10; i++)
-  {
-      for (j = 0; j < 10; j++)
-      {
-          if (j != i && kingdomCards[j] == kingdomCards[i])
-          {
-              return -1;
-          }
-      }
-  }
-
-
-  //initialize supply
-  ///////////////////////////////
-
-  //set number of Curse cards
-  if (numPlayers == 2)
-  {
-      state->supplyCount[curse] = 10;
-  }
-  else if (numPlayers == 3)
-  {
-      state->supplyCount[curse] = 20;
+    printf("Pass: Third card not look at \n");
   }
   else
   {
-      state->supplyCount[curse] = 30;
+    printf("Fail: Third Card looked at \n");
   }
-
-  //set number of Victory cards
-  if (numPlayers == 2)
-  {
-      state->supplyCount[estate] = 8;
-      state->supplyCount[duchy] = 8;
-      state->supplyCount[province] = 8;
-  }
-  else
-  {
-      state->supplyCount[estate] = 12;
-      state->supplyCount[duchy] = 12;
-      state->supplyCount[province] = 12;
-  }
-
-  //set number of Treasure cards
-  state->supplyCount[copper] = 60 - (7 * numPlayers);
-  state->supplyCount[silver] = 40;
-  state->supplyCount[gold] = 30;
-
-  //set number of Kingdom cards
-  for (i = adventurer; i <= treasure_map; i++)       	//loop all cards
-  {
-      for (j = 0; j < 10; j++)           		//loop chosen cards
-      {
-          if (kingdomCards[j] == i)
-          {
-              //check if card is a 'Victory' Kingdom card
-              if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
-              {
-                  if (numPlayers == 2) {
-                      state->supplyCount[i] = 8;
-                  }
-                  else {
-                      state->supplyCount[i] = 12;
-                  }
-              }
-              else
-              {
-                  state->supplyCount[i] = 10;
-              }
-              break;
-          }
-          else    //card is not in the set choosen for the game
-          {
-              state->supplyCount[i] = -1;
-          }
-      }
-
-  }
-
-  ////////////////////////
-  //supply intilization complete
-
-  //set player decks
-  for (i = 0; i < numPlayers; i++)
-  {
-      state->deckCount[i] = 0;
-      for (j = 0; j < 3; j++)
-      {
-          state->deck[i][j] = estate;
-          state->deckCount[i]++;
-      }
-      for (j = 3; j < 10; j++)
-      {
-          state->deck[i][j] = copper;
-          state->deckCount[i]++;
-      }
-  }
-
-  //shuffle player decks
-  for (i = 0; i < numPlayers; i++)
-  {
-      if ( shuffle(i, state) < 0 )
-      {
-          return -1;
-      }
-  }
-
-  //draw player hands
-  for (i = 0; i < numPlayers; i++)
-  {
-      //initialize hand size to zero
-      state->handCount[i] = 0;
-      state->discardCount[i] = 0;
-      //draw 5 cards
-      // for (j = 0; j < 5; j++)
-      //	{
-      //	  drawCard(i, state);
-      //	}
-  }
-
-  //set embargo tokens to 0 for all supply piles
-  for (i = 0; i <= treasure_map; i++)
-  {
-      state->embargoTokens[i] = 0;
-  }
-
-  //initialize first player's turn
-  state->outpostPlayed = 0;
-  state->phase = 0;
-  state->numActions = 1;
-  state->numBuys = 1;
-  state->playedCardCount = 0;
-  state->whoseTurn = 0;
-  state->handCount[state->whoseTurn] = 0;
-  //int it; move to top
-
-//Removed the draw cards so that I could manually set the user's cards
-//and the counts would be correct
-/*
-  //Moved draw cards to here, only drawing at the start of a turn
-  for (it = 0; it < 5; it++) {
-      drawCard(state->whoseTurn, state);
-  }
-*/
-  updateCoins(state->whoseTurn, state, 0);
-
-  return 0;
-}
-
-void runUnitTest(){
-  int i;
-  int seed = 100;
-  int numPlayer = 3;
-  int maxBonus = 10;
-  int p, r, handCount;
-  int bonus;
-  int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
-  int buySave, coinSave;
-  struct gameState G;
-  struct gameState savedG;
-  memset(&G, 23, sizeof(struct gameState));
-  r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
+  
+  
 
 
-}
 
-int main(int argc, char *argv[]){
 
-  runUnitTest();
-  return 0;
+    	
+printf("END TEST bug 7\n");
+printf("******************************************************************************************************\n");
+return 0;   
+
 }
