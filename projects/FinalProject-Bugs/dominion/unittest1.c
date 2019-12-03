@@ -192,6 +192,7 @@ void runUnitTest(){
   int bonus;
   int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
   int playerCardCount = 0;
+  int cardFound = 0;
   struct gameState G;
   struct gameState savedG;
   memset(&G, 23, sizeof(struct gameState));
@@ -227,7 +228,13 @@ void runUnitTest(){
   memcpy(&savedG, &G, sizeof(struct gameState));
   printf("Player 1 plays mine card, trades copper (cost = 0) for silver (cost = 3)\n");
 
-  cardEffect(mine, 1, silver, 0, &G, 0, &bonus)==0;
+  testAssert(cardEffect(mine, 1, silver, 0, &G, 0, &bonus)==0, "Mine card played successfully");
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == silver)
+      cardFound = 1;
+  }
+  testAssert(cardFound == 1, "Card player has chosen to gain is in hand");
   testAssert((playerCardCount==G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount), "Player card count unchanged" );
 
 
