@@ -197,6 +197,47 @@ void runUnitTest(){
   memset(&G, 23, sizeof(struct gameState));
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
 
+  //initialize player hand counts
+  G.handCount[0] = 2;
+  G.handCount[1] = 3;
+  G.handCount[2] = 3;
+
+  //initialize player 0's hand:
+  G.hand[0][0] = remodel;
+  G.supplyCount[remodel]--;
+  G.hand[0][1] = estate;
+  G.supplyCount[estate]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][1] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][2] = silver;
+  G.supplyCount[silver]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][1] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][2] = gold;
+  G.supplyCount[gold]--;
+
+  memcpy(&GSave, &G, sizeof(struct gameState));
+  testassert(cardEffect(remodel, 1, feast, 0, &G, 0, &bonus)==0, "Function finished without error" );
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == feast)
+      cardFound = 1;
+  }
+  testassert(cardFound == 1, "Player gained card");
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == estate)
+      cardFound = 1;
+  }
+  testassert(cardFound == 0, "Player card traded is missing from hand");
 
 }
 

@@ -183,6 +183,7 @@ int myInitializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 
   return 0;
 }
+
 void runUnitTest(){
   int i;
   int seed = 100;
@@ -192,11 +193,52 @@ void runUnitTest(){
   int bonus;
   int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
   int buySave, coinSave;
+  int cardFound;
   struct gameState G;
   struct gameState savedG;
   memset(&G, 23, sizeof(struct gameState));
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
+  //initialize player hand counts
+  G.handCount[0] = 2;
+  G.handCount[1] = 3;
+  G.handCount[2] = 3;
 
+  //initialize player 0's hand:
+  G.hand[0][0] = mine;
+  G.supplyCount[mine]--;
+  G.hand[0][1] = copper;
+  G.supplyCount[copper]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][1] = silver;
+  G.supplyCount[silver]--;
+  G.hand[1][2] = silver;
+  G.supplyCount[silver]--;
+
+  //initialize player 0's hand:
+  G.hand[1][0] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][1] = gold;
+  G.supplyCount[gold]--;
+  G.hand[1][2] = gold;
+  G.supplyCount[gold]--;
+
+  memcpy(&GSave, &G, sizeof(struct gameState));
+  testassert(cardEffect(mine, 1, silver, 0, &G, 0, &bonus)==0, "Function finished without error" );
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == silver)
+      cardFound = 1;
+  }
+  testassert(cardFound == 1, "Player gained card");
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == copper)
+      cardFound = 1;
+  }
+  testassert(cardFound == 0, "Player card traded is missing from hand");
 
 }
 
