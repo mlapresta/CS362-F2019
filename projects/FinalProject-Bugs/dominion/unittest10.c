@@ -208,8 +208,8 @@ void runUnitTest(){
   cardEffect(ambassador, 0, 2, 0, &G, 2, 0);
   char message[] = "test that cards removed from hand";
   testAssert(G.handCount[0] == Gsaved.handCount[0] - 2, message);
-  char message[] = "test that cards added to supply";
-  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver] + 2, message);
+  char message2[] = "test that cards added to supply";
+  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver] + 2, message2);
 }
 
 int main(int argc, char *argv[]){
