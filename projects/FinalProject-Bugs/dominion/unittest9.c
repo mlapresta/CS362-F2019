@@ -198,13 +198,16 @@ void runUnitTest(){
   r = myInitializeGame(numPlayer, k, seed, &G); // initialize a new game
 
   G.handCount[0] = 1;
-	  G.hand[0][0] = tribute;
+  G.hand[0][0] = tribute;
 
   G.handCount[1] = 2;
-
+  G.deckCount[1] = 2;
 	 //Set second player's hand, we set to all silvers
   G.hand[1][0] = silver;
   G.hand[1][1] = silver;
+
+  G.deck[1][0] = silver;
+  G.deck[1][1] = silver;
 
   memcpy(&Gsaved, &G, sizeof(struct gameState));
   // int cardEffect(int card, int choice1, int choice2, int choice3, 
