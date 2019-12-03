@@ -227,7 +227,21 @@ void runUnitTest(){
 
   printf("Player 1 plays mine card, trades silver (cost = 3) for copper (cost = 0)\n");
   memcpy(&savedG, &G, sizeof(struct gameState));
+
   testAssert((cardEffect(mine, 1, copper, 0, &G, 0, &bonus)==0), "Function finished without error" );
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == silver)
+      cardFound = 1;
+  }
+  testAssert(cardFound == 0, "Card player has chosen to exchange is removed from hand");
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == copper)
+      cardFound = 1;
+  }
+  testAssert(cardFound == 1, "Card player has chosen to gain is in hand");
+
 
 }
 

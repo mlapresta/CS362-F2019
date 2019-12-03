@@ -225,6 +225,7 @@ void runUnitTest(){
   G.supplyCount[gold]--;
   playerCardCount = G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount;
   memcpy(&savedG, &G, sizeof(struct gameState));
+  printf("Player 1 plays mine card, trades copper (cost = 0) for silver (cost = 3)\n");
 
   cardEffect(mine, 1, silver, 0, &G, 0, &bonus)==0;
   testAssert((playerCardCount==G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount), "Player card count unchanged" );

@@ -225,8 +225,23 @@ void runUnitTest(){
   G.hand[1][2] = gold;
   G.supplyCount[gold]--;
 
+  printf("Player 1 plays remodel card, trades silver (cost = 3) for feast (cost = 4)\n");
+
   memcpy(&savedG, &G, sizeof(struct gameState));
   testAssert(cardEffect(remodel, 1, feast, 0, &G, 0, &bonus)==0, "Function finished without error" );
+
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == silver)
+      cardFound = 1;
+  }
+  testAssert(cardFound == 0, "Card player has chosen to exchange is removed from hand");
+  cardFound = 0;
+  for (i=0; i<G.handCount[0]; i++){
+    if (G.hand[0][i] == feast)
+      cardFound = 1;
+  }
+  testAssert(cardFound == 1, "Card player has chosen to gain is in hand");
 
 }
 
