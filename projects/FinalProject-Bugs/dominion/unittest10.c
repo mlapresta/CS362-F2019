@@ -190,7 +190,7 @@ void runUnitTest(){
   int maxBonus = 10;
   int p, r, handCount;
   int bonus;
-  int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
+  int k[10] = {ambassador, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
   int buySave, coinSave;
   struct gameState G;
   struct gameState Gsaved;
@@ -203,6 +203,7 @@ void runUnitTest(){
 
 
   memcpy(&Gsaved, &G, sizeof(struct gameState));
+  //int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
   cardEffect(ambassador, silver, 0, 0, &G, 0, 0);
   char message[] = "test that cards removed";
   testAssert(G.handCount[0] == 0, message);
