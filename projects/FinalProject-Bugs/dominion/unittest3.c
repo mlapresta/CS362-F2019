@@ -237,11 +237,11 @@ void runUnitTest(){
   }
   testAssert(cardFound == 0, "Card player has chosen to exchange is removed from hand");
   cardFound = 0;
-  for (i=0; i<G.handCount[0]; i++){
-    if (G.hand[0][i] == feast)
+  for (i=0; i<G.discardCount[0]; i++){
+    if (G.discard[0][i] == feast)
       cardFound = 1;
   }
-  testAssert(cardFound == 1, "Card player has chosen to gain is in hand");
+  testAssert(cardFound == 1, "Card player has chosen to gain is in discard pile");
 
 }
 
