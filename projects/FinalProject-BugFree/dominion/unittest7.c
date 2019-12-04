@@ -38,13 +38,13 @@ int main() {
     int k[10] = {adventurer, council_room, tribute, gardens, mine
                , remodel, smithy, village, baron, minion};
     struct gameState G;
-    int card=19, choice1=0,choice2=0,choice3=0, handPos=0; 
+    int card=19, choice1=0,choice2=0,choice3=0, handPos=0;
     int bonus=0;
-    
-    printf("Testing bug 7\n");  
+    int bonusSaved;
+    printf("Testing bug 7\n");
 
-    
-    //initialize game 
+
+    //initialize game
    	initializeGame(numPlayer,k,seed,&G);
     int currentPlayer=whoseTurn(&G);
 
@@ -55,7 +55,7 @@ int main() {
   G.supplyCount[tribute]--;
   G.hand[0][1] = copper;
   G.supplyCount[copper]--;
-  
+
   G.handCount[1] = 3;
 
   //Set second player's hand, we set to 2 mines and 1 gold
@@ -66,11 +66,12 @@ int main() {
   //note: when calling the tribute card (number 19) choice1,choice2
   //choice3 and bonus serve no purpose
   int actionsPre=G.numActions;
-  int coinsPre=G.coins;  
+  int coinsPre=G.coins;
+  bonusSaved = bonus;
   cardEffect(card, choice1,choice2,choice3,&G,handPos,&bonus);
-  
-  //asserts if actions before and after playing tribute card are the same. 
-  //if third card is not looked at actions of player 1 should be increaed by 2 only. 
+
+  //asserts if actions before and after playing tribute card are the same.
+  //if third card is not looked at actions of player 1 should be increaed by 2 only.
   if((assertValues(G.numActions,(actionsPre+2)))&& (assertValues(coinsPre+2,G.coins)))
   {
     printf("Pass: Third card not look at \n");
@@ -79,15 +80,30 @@ int main() {
   {
     printf("Fail: Third Card looked at \n");
   }
-  
-  
+
+  printf("Added test due to bug #8 fix for how coins are handled \n");
+  //Added this test due to the fix for bug 8
+  //asserts if actions before and after playing tribute card are the same.
+  //if third card is not looked at actions of player 1 should be increaed by 2 only.
+  if((assertValues(G.numActions,(actionsPre+2)))&& (assertValues(bonusSaved+2,bonus)))
+  {
+    printf("Pass: Third card not look at \n");
+  }
+  else
+  {
+    printf("Fail: Third Card looked at \n");
+  }
 
 
 
 
-    	
+
+
+
+
+
 printf("END TEST bug 7\n");
 printf("******************************************************************************************************\n");
-return 0;   
+return 0;
 
 }
