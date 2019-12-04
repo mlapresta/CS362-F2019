@@ -186,7 +186,7 @@ int myInitializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 void runUnitTest(){
   int i;
   int seed = 100;
-  int numPlayer = 3;
+  int numPlayer = 2;
   int maxBonus = 10;
   int p, r, handCount;
   int bonus;
@@ -210,8 +210,8 @@ void runUnitTest(){
   // printHand(0, &G);
   char message[] = "test that cards removed from hand";
   testAssert(G.handCount[0] == Gsaved.handCount[0] - 3, message);
-  char message2[] = "test that cards added to supply";
-  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver], message2);
+  char message2[] = "test that supply is correctly modified";
+  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver] + 1, message2);
 }
 
 int main(int argc, char *argv[]){
