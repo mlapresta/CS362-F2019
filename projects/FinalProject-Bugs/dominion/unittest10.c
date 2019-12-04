@@ -204,12 +204,14 @@ void runUnitTest(){
   G.hand[0][2] = ambassador;
 
   memcpy(&Gsaved, &G, sizeof(struct gameState));
+  //printHand(0, &G);
   //int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
   cardEffect(ambassador, 0, 2, 0, &G, 2, 0);
+  // printHand(0, &G);
   char message[] = "test that cards removed from hand";
-  testAssert(G.handCount[0] == Gsaved.handCount[0] - 2, message);
+  testAssert(G.handCount[0] == Gsaved.handCount[0] - 3, message);
   char message2[] = "test that cards added to supply";
-  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver] + 2, message2);
+  testAssert(G.supplyCount[silver] == Gsaved.supplyCount[silver], message2);
 }
 
 int main(int argc, char *argv[]){

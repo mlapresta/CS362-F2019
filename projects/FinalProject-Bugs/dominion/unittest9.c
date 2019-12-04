@@ -212,7 +212,8 @@ void runUnitTest(){
   memcpy(&Gsaved, &G, sizeof(struct gameState));
   // int cardEffect(int card, int choice1, int choice2, int choice3, 
   // struct gameState *state, int handPos, int *bonus)
-  cardEffect(tribute, 0, 0, 0, &G, 1, 0);
+  int bonus1 = 0;
+  cardEffect(tribute, 0, 0, 0, &G, 1, &bonus1);
   char message[] = "Tribute effect applied properly, 2 coins added";
   testAssert(G.coins == Gsaved.coins + 2, message);
   char message2[] = "Tribute effect applied properly, no actions added";
